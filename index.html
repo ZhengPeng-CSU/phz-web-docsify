@@ -12,11 +12,28 @@
   <div id="app"></div>
   <script>
     window.$docsify = {
-      name: '',
-      repo: ''
+      name: 'nullptr的笔记',
+      repo: 'https://github.com/ZhengPeng-CSU/phz-web-docsify.git',
+      subMaxLevel: 2,
+      auto2top: true,     // 切换页面后是否自动跳转到页面顶部
+      coverpage: true,    // 开启渲染封面
+      formatUpdated: '{YYYY}-{MM}-{DD} {HH}:{mm}:{ss}', // 显示文档更新日期
+      loadSidebar: true,  //侧边栏
+      loadNavbar: false,    //导航栏
+      pagination: {
+        previousText: 'PREVIOUS',
+        nextText: 'NEXT',
+        crossChapter: true
+      }
     }
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-clike.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
 </body>
 </html>
