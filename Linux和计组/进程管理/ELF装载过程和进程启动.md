@@ -303,3 +303,32 @@ __libc_fork (void)
 ...
 }
 ```
+_Fork -> arch_fork，而后者则是调用宏定义，可以看到当前fork对应的系统调用实际上时clone了。
+```C++
+static inline pid_t
+arch_fork (void *ctid)
+{
+  	const int flags = CLONE_CHILD_SETTID | CLONE_CHILD_CLEARTID | SIGCHLD;
+  	long int ret;
+#ifdef __ASSUME_CLONE_BACKWARDS
+# ifdef INLINE_CLONE_SYSCALL
+  	ret = INLINE_CLONE_SYSCALL (flags, 0, NULL, 0, ctid);
+# else
+  	ret = INLINE_SYSCALL_CALL (clone, flags, 0, NULL, 0, ctid);
+# endif
+#elif defined(__ASSUME_CLONE_BACKWARDS2)
+  	ret = INLINE_SYSCALL_CALL (clone, 0, flags, NULL, ctid, 0);
+#elif defined(__ASSUME_CLONE_BACKWARDS3)
+  	ret = INLINE_SYSCALL_CALL (clone, flags, 0, 0, NULL, ctid, 0);
+#elif defined(__ASSUME_CLONE2)
+  	ret = INLINE_SYSCALL_CALL (clone2, flags, 0, 0, NULL, ctid, 0);
+#elif defined(__ASSUME_CLONE_DEFAULT)
+  	ret = INLINE_SYSCALL_CALL (clone, flags, 0, NULL, ctid, 0);
+#else
+# error "Undefined clone variant"
+#endif
+  	return ret;
+}
+```
+这个宏定义是如何展开的，可以参考系统调用这一章，这里不再多述了，接下来我们就看内核中clone的实现。
+

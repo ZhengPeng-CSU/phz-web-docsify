@@ -1,0 +1,43 @@
+## 2024 0702
+上个月就很堕落吗，沉迷于圣兽之王和怪物猎人，啥都荒废了一个月，这个月继续坚持
+### 字符串相乘
+这题挺有意思，模拟乘法计算过程，比较有意思的一点是储存结果是不进位，最后统一处理进位。需要注意的是，数组存储时是反过来的，而不是按照字面的大端顺序，所以先反向遍历一一次。
+```C++
+class Solution {
+public:
+    std::string multiply(const std::string& num1, const std::string& num2) {
+        std::vector<int> num_arr1;
+        std::vector<int> num_arr2;
+        for (auto iter = num1.rbegin(); iter != num1.rend(); iter++) {
+            num_arr1.push_back(*iter - '0');
+        }
+        for (auto iter = num2.rbegin(); iter != num2.rend(); iter++) {
+            num_arr2.push_back(*iter - '0');
+        }
+        std::vector<int> result(num_arr1.size() + num_arr2.size());
+        for (int i = 0; i < num_arr1.size(); i++) {
+            for (int j = 0; j < num_arr2.size(); j++) {
+                result[i + j] += num_arr2[j] * num_arr1[i];
+            }
+        }
+        int flag = 0;
+        for (auto& val : result) {
+            std::cout << val << std::endl;
+            val += flag;
+            flag = val / 10;
+            val %= 10;
+        }
+        int index = result.size() - 1;
+        // 为什么不能是 >= 0，因为结果至少有个0
+        while (index > 0 && result[index] == 0) {
+            index--;
+        }
+        std::string final_res;
+        while (index >= 0) {
+            final_res.append(1, result[index] + '0');
+            index--;
+        }
+        return final_res;
+    }
+};
+```
